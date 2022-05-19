@@ -351,7 +351,7 @@ def get_timeline_repo(pull_df,filepath,reposlug):
         print(indexOverall)
 
     mergeddf=pd.concat(currentrepo_timeline_dfs,ignore_index=True)
-    mergeddf.to_excel(filepath+"events_file.xls")
+    return mergeddf
 
 
 
@@ -364,11 +364,20 @@ if __name__ == '__main__':
     gh_api =repoMethod("token1,token2,token3,token4,token5")
 
 
-    # the list of repo slugs that you have already collected issues for. You can store the issues collected along with their repo slug into a json file.
+    # the list of repo slugs that you want to collected timeline events of issues for.
     
-    repo_list=" "
-    
+    repo_list=read_keywords_list('file path')
+
     for i in range(len(repo_list)):
-        get_timeline_repo(savefilepath,repo_list[i])
+        result_obj=gh_api.repo_pullrequests(example_repo[i],"closed")
+        if i == 0:
+            PRs_df=pd.DataFrame(result_obj)
+            event_df=get_timeline_repo(PRs_df,example_repo[i])
+        elif i > 0:
+            More_PRs_df=pd.DataFrame(result_obj)
+            More_event_df=get_timeline_repo(More_PRs_df,example_repo[i])
+            event_df=event_df.append(More_event_df)
+
+    event_df.to_excel(savefilepath+"events_file.xls")
 
 
