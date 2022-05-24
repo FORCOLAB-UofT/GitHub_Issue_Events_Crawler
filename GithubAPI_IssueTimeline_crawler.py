@@ -125,7 +125,6 @@ class repoMethod(scraper.GitHubAPI):
                     'label': event['label']['name'],
                     'body': ''
                 }
-            # add catching unlabeled events and contents functionality
             elif event['event'] == 'unlabeled':
                 author = event['actor'] or {}
                 yield {
@@ -214,6 +213,24 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': ''
                 }
+            elif event['event'] == 'unassigned':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': '',
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': "comment",
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': ''
+                }
             elif event['event'] == 'closed':
                 author = event['actor'] or {}
                 yield {
@@ -233,6 +250,24 @@ class repoMethod(scraper.GitHubAPI):
                     'body': ''
                 }
             elif event['event'] == 'subscribed':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': event['commit_id'],
+                    'created_at': event.get('created_at'),
+                    'id': event['commit_id'],
+                    'repo': '',
+                    'type': "subscribed",
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': ''
+                }
+            elif event['event'] == 'unsubscribed':
                 author = event['actor'] or {}
                 yield {
                     'event': event['event'],
@@ -286,7 +321,6 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': ''
                 }
-            # add connected/disconnected event types
             elif event['event'] == 'connected':
                 author = event['actor'] or {}
                 yield {
