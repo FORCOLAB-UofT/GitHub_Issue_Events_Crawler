@@ -286,6 +286,7 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': ''
                 }
+            # add connected/disconnected event types
             elif event['event'] == 'connected':
                 author = event['actor'] or {}
                 yield {
