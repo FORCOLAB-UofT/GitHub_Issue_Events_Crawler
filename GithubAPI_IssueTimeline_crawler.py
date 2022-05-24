@@ -357,6 +357,42 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': ''
                 }
+            elif event['event'] == 'milestoned':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': '',
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': "milestoned",
+                    'state': '',
+                    'assignees': '',
+                    'label': event['milestone']['title'],
+                    'body': ''
+                }
+            elif event['event'] == 'demilestoned':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': '',
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': "milestoned",
+                    'state': '',
+                    'assignees': '',
+                    'label': event['milestone']['title'],
+                    'body': ''
+                }
             else:
                 yield {
                     'event': event['event'],
