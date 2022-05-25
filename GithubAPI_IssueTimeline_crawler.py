@@ -429,6 +429,42 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': ''
                 }
+            elif event['event'] == 'locked':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': '',
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': "locked",
+                    'state': '',
+                    'assignees': '',
+                    'label': event['lock_reason'],
+                    'body': ''
+                }
+            elif event['event'] == 'unlocked':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': '',
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': "unlocked",
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': ''
+                }
             else:
                 yield {
                     'event': event['event'],
