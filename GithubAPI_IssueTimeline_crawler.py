@@ -537,6 +537,24 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': ''
                 }
+            elif event['event'] == 'reopened':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': event['commit_id'],
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': "reopen",
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': ''
+                }
             else:
                 yield {
                     'event': event['event'],
