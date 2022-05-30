@@ -573,6 +573,24 @@ class repoMethod(scraper.GitHubAPI):
                     'label': event['rename'].get('from'),
                     'body': event['rename'].get('to')
                 }
+             elif event['event'] == 'transferred':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': event['commit_id'],
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': "transfer",
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': ''
+                }
             else:
                 yield {
                     'event': event['event'],
