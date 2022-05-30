@@ -631,6 +631,26 @@ class repoMethod(scraper.GitHubAPI):
                     'requester': event['review_requester'].get('login'),
                     'reviewer': event['requested_reviewer'].get('login')
                 }
+            elif event['event'] == 'review_dismissed':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': event['commit_id'],
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': '',
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': '',
+                    'dismissed_state': event['dismissed_review'].get('state'),
+                    'dismissal_message': event['dismissed_review'].get('dismissal_message')
+                }      
             else:
                 yield {
                     'event': event['event'],
