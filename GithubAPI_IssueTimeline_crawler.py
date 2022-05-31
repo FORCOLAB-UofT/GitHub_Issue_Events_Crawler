@@ -650,7 +650,61 @@ class repoMethod(scraper.GitHubAPI):
                     'body': '',
                     'dismissed_state': event['dismissed_review'].get('state'),
                     'dismissal_message': event['dismissed_review'].get('dismissal_message')
-                }      
+                }
+            elif event['event'] == 'head_ref_restored':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': event['commit_id'],
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': '',
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': '',
+                }
+            elif event['event'] == 'head_ref_force_pushed':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': event['commit_id'],
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': '',
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': '',
+                }
+            elif event['event'] == 'head_ref_deleted':
+                author = event['actor'] or {}
+                yield {
+                    'event': event['event'],
+                    'author': author.get('login'),
+                    'email': '',
+                    'author_type': author.get('type'),
+                    'author_association': '',
+                    'commit_id': event['commit_id'],
+                    'created_at': event.get('created_at'),
+                    'id': '',
+                    'repo': '',
+                    'type': '',
+                    'state': '',
+                    'assignees': '',
+                    'label': '',
+                    'body': '',
+                }                
             else:
                 yield {
                     'event': event['event'],
