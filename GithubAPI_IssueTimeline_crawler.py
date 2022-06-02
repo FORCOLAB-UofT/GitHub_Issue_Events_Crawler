@@ -707,22 +707,22 @@ class repoMethod(scraper.GitHubAPI):
                     'body': '',
                 }
             elif event['event'] == 'commit-commented':
-                author = event['comments']['user'] or {}
+                comments = event['comments'] or {}
                 yield {
                     'event': event['event'],
-                    'author': author.get('login'),
+                    'author': [comment['user'].get('login') for comment in comments],
                     'email': '',
-                    'author_type': author.get('type'),
-                    'author_association': event['author_association'],
-                    'commit_id': event['commit_id'],
-                    'created_at': event.get('created_at'),
+                    'author_type': [comment['user'].get('type') for comment in comments],
+                    'author_association': [comment['author_association'] for comment in comments],
+                    'commit_id': [comment['commit_id'] for comment in comments],
+                    'created_at': [comment.get('created_at') for comment in comments],
                     'id': '',
                     'repo': '',
                     'type': '',
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': event['body'],
+                    'body': [comment['body'] for comment in comments],
                 }                
             else:
                 yield {
