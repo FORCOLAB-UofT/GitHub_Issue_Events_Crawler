@@ -209,7 +209,7 @@ class repoMethod(scraper.GitHubAPI):
                     'repo': '',
                     'type': '',
                     'state': '',
-                    'assignees': '',
+                    'assignees': event['assignee'].get('login'),
                     'label': '',
                     'body': ''
                 }
@@ -227,7 +227,7 @@ class repoMethod(scraper.GitHubAPI):
                     'repo': '',
                     'type': '',
                     'state': '',
-                    'assignees': '',
+                    'assignees': event['assignee'].get('login'),
                     'label': '',
                     'body': ''
                 }
