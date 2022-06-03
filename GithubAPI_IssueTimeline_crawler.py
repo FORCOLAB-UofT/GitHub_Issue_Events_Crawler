@@ -710,20 +710,20 @@ class repoMethod(scraper.GitHubAPI):
                 comments = event['comments'] or {}
                 yield {
                     'event': event['event'],
-                    'author': [comment['user'].get('login') for comment in comments],
+                    'author': [[comment['user'].get('login')] for comment in comments],
                     'email': '',
-                    'author_type': [comment['user'].get('type') for comment in comments],
-                    'author_association': [comment['author_association'] for comment in comments],
-                    'commit_id': [comment['commit_id'] for comment in comments],
-                    'created_at': [comment.get('created_at') for comment in comments],
+                    'author_type': [[comment['user'].get('type')] for comment in comments],
+                    'author_association': [[comment['author_association']] for comment in comments],
+                    'commit_id': [[comment['commit_id']] for comment in comments],
+                    'created_at': [[comment.get('created_at')] for comment in comments],
                     'id': '',
                     'repo': '',
                     'type': '',
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': [comment['body'] for comment in comments],
-                }                
+                    'body': [[comment['body']] for comment in comments],
+                }    
             else:
                 yield {
                     'event': event['event'],
