@@ -86,8 +86,16 @@ class repoMethod(scraper.GitHubAPI):
                     'type': 'pull_request' if 'pull_request' in event['source']['issue'].keys() else 'issue',
                     'state': event['source']['issue']['state'],
                     'assignees': event['source']['issue']['assignees'],
-                    'label': "",
-                    'body': ''
+                    'label': '',
+                    'body': '',
+                    'submitted_at': '',
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'referenced':
                 author = event['actor'] or {}
@@ -107,7 +115,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'labeled':
                 author = event['actor'] or {}
@@ -127,7 +141,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': event['label']['name'],
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'unlabeled':
                 author = event['actor'] or {}
@@ -147,7 +167,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': event['label']['name'],
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'committed':
                 yield {
@@ -164,7 +190,15 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'reviewed':
                 author = event['user'] or {}
@@ -184,7 +218,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': event['body'],
                     'submitted_at': event.get('submitted_at'),
-                    'links': event['_links']['html'].get('href')
+                    'links': event['_links']['html'].get('href'),
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'commented':
                 yield {
@@ -203,7 +243,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': event['body'],
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'assigned':
                 author = event['actor'] or {}
@@ -223,7 +269,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'unassigned':
                 author = event['actor'] or {}
@@ -243,7 +295,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'closed':
                 author = event['actor'] or {}
@@ -263,7 +321,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'subscribed':
                 author = event['actor'] or {}
@@ -283,7 +347,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'unsubscribed':
                 author = event['actor'] or {}
@@ -303,7 +373,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'merged':
                 author = event['actor'] or {}
@@ -323,7 +399,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'mentioned':
                 author = event['actor'] or {}
@@ -343,7 +425,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'connected':
                 author = event['actor'] or {}
@@ -363,7 +451,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'disconnected':
                 author = event['actor'] or {}
@@ -383,7 +477,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'milestoned':
                 author = event['actor'] or {}
@@ -403,7 +503,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': event['milestone']['title'],
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'demilestoned':
                 author = event['actor'] or {}
@@ -423,7 +529,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': event['milestone']['title'],
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'marked_as_duplicate':
                 author = event['actor'] or {}
@@ -443,7 +555,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'unmarked_as_duplicate':
                 author = event['actor'] or {}
@@ -463,7 +581,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'locked':
                 author = event['actor'] or {}
@@ -483,7 +607,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': event['lock_reason'],
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'unlocked':
                 author = event['actor'] or {}
@@ -503,7 +633,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'convert_to_draft':
                 author = event['actor'] or {}
@@ -523,7 +659,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label':'',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'ready_for_review':
                 author = event['actor'] or {}
@@ -543,7 +685,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'pinned':
                 author = event['actor'] or {}
@@ -563,7 +711,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label':'',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'unpinned':
                 author = event['actor'] or {}
@@ -583,7 +737,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'reopened':
                 author = event['actor'] or {}
@@ -603,7 +763,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'renamed':
                 author = event['actor'] or {}
@@ -623,7 +789,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': event['rename'].get('from'),
                     'body': event['rename'].get('to'),
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'transferred':
                 author = event['actor'] or {}
@@ -643,7 +815,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'review_requested':
                 author = event['actor'] or {}
@@ -664,8 +842,12 @@ class repoMethod(scraper.GitHubAPI):
                     'body': '',
                     'submitted_at': '',
                     'links': '',
+                    'old_name': '',
+                    'new_name': '',
                     'requester': event['review_requester'].get('login'),
-                    'reviewer': event['requested_reviewer'].get('login')
+                    'reviewer': event['requested_reviewer'].get('login'),
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'review_requested_removed':
                 author = event['actor'] or {}
@@ -686,8 +868,12 @@ class repoMethod(scraper.GitHubAPI):
                     'body': '',
                     'submitted_at': '',
                     'links': '',
+                    'old_name': '',
+                    'new_name': '',
                     'requester': event['review_requester'].get('login'),
-                    'reviewer': event['requested_reviewer'].get('login')
+                    'reviewer': event['requested_reviewer'].get('login'),
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'review_dismissed':
                 author = event['actor'] or {}
@@ -708,6 +894,10 @@ class repoMethod(scraper.GitHubAPI):
                     'body': '',
                     'submitted_at': '',
                     'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
                     'dismissed_state': event['dismissed_review'].get('state'),
                     'dismissal_message': event['dismissed_review'].get('dismissal_message')
                 }
@@ -729,7 +919,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'head_ref_force_pushed':
                 author = event['actor'] or {}
@@ -749,7 +945,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'head_ref_deleted':
                 author = event['actor'] or {}
@@ -769,7 +971,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'commit-commented':
                 comments = event['comments'] or {}
@@ -789,7 +997,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': [[comment['body']] for comment in comments],
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
             elif event['event'] == 'line-commented':
                 comments = event['comments'] or {}
@@ -809,7 +1023,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': [[comment['body']] for comment in comments],
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }            
             else:
                 yield {
@@ -828,7 +1048,13 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': '',
                     'submitted_at': '',
-                    'links': ''
+                    'links': '',
+                    'old_name': '',
+                    'new_name': '',
+                    'requester': '',
+                    'reviewer': '',
+                    'dismissed_state': '',
+                    'dismissal_message': ''
                 }
 
 
