@@ -815,8 +815,18 @@ def get_timeline_repo(pull_df,filepath,reposlug):
 #main 
 if __name__ == '__main__':
 
-    savefilepath=" "
+    # server connection
+    mydb = mysql.connector.connect(
+        host='',
+        user='',
+        password='',
+        port='',
+        database=''
+    )
 
+    mycursor = mydb.cursor()
+
+    
     # Your github tokens for using GithubAPI
     gh_api =repoMethod("token1,token2,token3,token4,token5")
 
@@ -829,12 +839,9 @@ if __name__ == '__main__':
         result_obj=gh_api.repo_pullrequests(example_repo[i],"closed")
         if i == 0:
             PRs_df=pd.DataFrame(result_obj)
-            event_df=get_timeline_repo(PRs_df,example_repo[i])
+            get_timeline_repo(PRs_df,example_repo[i])
         elif i > 0:
             More_PRs_df=pd.DataFrame(result_obj)
-            More_event_df=get_timeline_repo(More_PRs_df,example_repo[i])
-            event_df=event_df.append(More_event_df)
-
-    event_df.to_excel(savefilepath+"events_file.xls")
-
+            get_timeline_repo(More_PRs_df,example_repo[i])
+            
 
