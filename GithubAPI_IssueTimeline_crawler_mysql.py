@@ -105,7 +105,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'labeled':
                 author = event['actor'] or {}
@@ -123,7 +125,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': event['label']['name'],
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'unlabeled':
                 author = event['actor'] or {}
@@ -141,7 +145,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': event['label']['name'],
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'committed':
                 yield {
@@ -195,7 +201,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': event['body']
+                    'body': event['body'],
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'assigned':
                 author = event['actor'] or {}
@@ -213,7 +221,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': event['assignee'].get('login'),
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'unassigned':
                 author = event['actor'] or {}
@@ -231,7 +241,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': event['assignee'].get('login'),
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'closed':
                 author = event['actor'] or {}
@@ -249,7 +261,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'subscribed':
                 author = event['actor'] or {}
@@ -267,7 +281,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'unsubscribed':
                 author = event['actor'] or {}
@@ -285,7 +301,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'merged':
                 author = event['actor'] or {}
@@ -303,7 +321,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'mentioned':
                 author = event['actor'] or {}
@@ -321,7 +341,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'connected':
                 author = event['actor'] or {}
@@ -339,7 +361,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'disconnected':
                 author = event['actor'] or {}
@@ -357,7 +381,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'milestoned':
                 author = event['actor'] or {}
@@ -375,7 +401,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': event['milestone']['title'],
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'demilestoned':
                 author = event['actor'] or {}
@@ -393,7 +421,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': event['milestone']['title'],
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'marked_as_duplicate':
                 author = event['actor'] or {}
@@ -411,7 +441,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'unmarked_as_duplicate':
                 author = event['actor'] or {}
@@ -429,7 +461,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'locked':
                 author = event['actor'] or {}
@@ -447,7 +481,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': event['lock_reason'],
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'unlocked':
                 author = event['actor'] or {}
@@ -465,7 +501,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'convert_to_draft':
                 author = event['actor'] or {}
@@ -483,7 +521,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label':'',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'ready_for_review':
                 author = event['actor'] or {}
@@ -501,7 +541,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'pinned':
                 author = event['actor'] or {}
@@ -519,7 +561,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label':'',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'unpinned':
                 author = event['actor'] or {}
@@ -537,7 +581,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'reopened':
                 author = event['actor'] or {}
@@ -555,7 +601,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'renamed':
                 author = event['actor'] or {}
@@ -573,7 +621,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': event['rename'].get('from'),
-                    'body': event['rename'].get('to')
+                    'body': event['rename'].get('to'),
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'transferred':
                 author = event['actor'] or {}
@@ -591,7 +641,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'review_requested':
                 author = event['actor'] or {}
@@ -610,6 +662,8 @@ class repoMethod(scraper.GitHubAPI):
                     'assignees': '',
                     'label': '',
                     'body': '',
+                    'submitted_at': '',
+                    'links': '',
                     'requester': event['review_requester'].get('login'),
                     'reviewer': event['requested_reviewer'].get('login')
                 }
@@ -630,6 +684,8 @@ class repoMethod(scraper.GitHubAPI):
                     'assignees': '',
                     'label': '',
                     'body': '',
+                    'submitted_at': '',
+                    'links': '',
                     'requester': event['review_requester'].get('login'),
                     'reviewer': event['requested_reviewer'].get('login')
                 }
@@ -650,6 +706,8 @@ class repoMethod(scraper.GitHubAPI):
                     'assignees': '',
                     'label': '',
                     'body': '',
+                    'submitted_at': '',
+                    'links': '',
                     'dismissed_state': event['dismissed_review'].get('state'),
                     'dismissal_message': event['dismissed_review'].get('dismissal_message')
                 }
@@ -670,6 +728,8 @@ class repoMethod(scraper.GitHubAPI):
                     'assignees': '',
                     'label': '',
                     'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'head_ref_force_pushed':
                 author = event['actor'] or {}
@@ -688,6 +748,8 @@ class repoMethod(scraper.GitHubAPI):
                     'assignees': '',
                     'label': '',
                     'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'head_ref_deleted':
                 author = event['actor'] or {}
@@ -706,6 +768,8 @@ class repoMethod(scraper.GitHubAPI):
                     'assignees': '',
                     'label': '',
                     'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'commit-commented':
                 comments = event['comments'] or {}
@@ -724,6 +788,8 @@ class repoMethod(scraper.GitHubAPI):
                     'assignees': '',
                     'label': '',
                     'body': [[comment['body']] for comment in comments],
+                    'submitted_at': '',
+                    'links': ''
                 }
             elif event['event'] == 'line-commented':
                 comments = event['comments'] or {}
@@ -742,6 +808,8 @@ class repoMethod(scraper.GitHubAPI):
                     'assignees': '',
                     'label': '',
                     'body': [[comment['body']] for comment in comments],
+                    'submitted_at': '',
+                    'links': ''
                 }            
             else:
                 yield {
@@ -758,7 +826,9 @@ class repoMethod(scraper.GitHubAPI):
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': ''
+                    'body': '',
+                    'submitted_at': '',
+                    'links': ''
                 }
 
 
