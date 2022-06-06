@@ -169,14 +169,15 @@ class repoMethod(scraper.GitHubAPI):
                     'author_type': author.get('type'),
                     'author_association': event['author_association'],
                     'commit_id': '',
-                    'created_at': event.get('submitted_at'),
+                    'created_at': event.get('created_at'),
                     'id': '',
                     'repo': '',
                     'type': '',
                     'state': event['state'],
                     'assignees': '',
                     'label': '',
-                    'body': '',
+                    'body': event['body'],
+                    'submitted_at': event.get('submitted_at'),
                     'links': event['_links']['html'].get('href')
                 }
             elif event['event'] == 'commented':
