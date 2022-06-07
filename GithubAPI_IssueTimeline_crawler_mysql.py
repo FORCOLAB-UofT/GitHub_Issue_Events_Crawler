@@ -76,6 +76,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -102,6 +103,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -128,6 +130,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -154,6 +157,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -178,7 +182,8 @@ class repoMethod(scraper.GitHubAPI):
             elif event['event'] == 'committed':
                 yield {
                     'event': event['event'],
-                    'author': event['author']['name'],
+                    'author': '',
+                    'author_name': event['author']['name'],
                     'email': event['author']['email'],
                     'author_type': '',
                     'author_association': '',
@@ -205,6 +210,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': event['author_association'],
@@ -230,6 +236,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': event['user']['login'],
+                    'author_name': '',
                     'email': '',
                     'author_type': event['user']['type'],
                     'author_association': event['author_association'],
@@ -256,6 +263,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -282,6 +290,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -308,6 +317,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -334,6 +344,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -360,6 +371,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -386,6 +398,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -412,6 +425,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -438,6 +452,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': '',
                     'author_association': '',
@@ -464,6 +479,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': '',
                     'author_association': '',
@@ -490,6 +506,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -516,6 +533,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -542,6 +560,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -568,6 +587,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -594,6 +614,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -620,6 +641,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -646,6 +668,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -672,6 +695,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -698,6 +722,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -724,6 +749,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -750,6 +776,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -776,6 +803,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -802,6 +830,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -828,6 +857,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -854,6 +884,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -880,6 +911,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -906,6 +938,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -932,6 +965,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -958,6 +992,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
+                    'author_name': '',
                     'email': '',
                     'author_type': author.get('type'),
                     'author_association': '',
@@ -984,6 +1019,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': [[comment['user'].get('login')] for comment in comments],
+                    'author_name': '',
                     'email': '',
                     'author_type': [[comment['user'].get('type')] for comment in comments],
                     'author_association': [[comment['author_association']] for comment in comments],
@@ -1010,6 +1046,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': [[comment['user'].get('login')] for comment in comments],
+                    'author_name': '',
                     'email': '',
                     'author_type': [[comment['user'].get('type')] for comment in comments],
                     'author_association': [[comment['author_association']] for comment in comments],
@@ -1035,6 +1072,7 @@ class repoMethod(scraper.GitHubAPI):
                 yield {
                     'event': event['event'],
                     'author': '',
+                    'author_name': '',
                     'email': '',
                     'author_type': '',
                     'author_association': '',
