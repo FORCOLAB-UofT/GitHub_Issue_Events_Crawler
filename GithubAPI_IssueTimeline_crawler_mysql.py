@@ -1135,6 +1135,24 @@ def get_timeline_repo(pull_df,filepath,reposlug):
         timeline_df["issue_type"]="pulls"
         timeline_df["issue_status"]="closed"
         currentrepo_timeline_dfs.append(timeline_df)
+        
+        insert=("INSERT INTO `schema_name`.`table_name`"
+                "(`event`, `author`, `author_name`, `email`, `author_type`,"
+                "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
+                "`type`, `state`,`assignees`, `label`, `body`, "
+                "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
+                "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_source`, `issue_number`, "
+                "`issue_type`, `issue_status`) VALUES"
+                "(%s,%s,%s,%s,%s,"
+                "%s,%s,%s,%s,%s,"
+                "%s,%s,%s,%s,%s,"
+                "%s,%s,%s,%s,%s,"
+                "%s,%s,%s,%s,%s,"
+                "%s,%s);")        
+        
+        mycursor.executemany(insert, timeline_df.values.tolist())
+        mydb.commit()
+        
         indexOverall+=1
         end_time=time.time()
         times=round(end_time-start_time,2)
