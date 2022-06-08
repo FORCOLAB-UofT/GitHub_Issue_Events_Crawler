@@ -73,6 +73,7 @@ class repoMethod(scraper.GitHubAPI):
             # print('repo: ' + repo + ' issue: ' + str(issue_id) + ' event: ' + event['event'])
             if event['event'] == 'cross-referenced':
                 author = event['actor'] or {}
+                assignees = event['source']['issue']['assignees'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -86,7 +87,7 @@ class repoMethod(scraper.GitHubAPI):
                     'repo': event['source']['issue']['repository']['full_name'],
                     'type': 'pull_request' if 'pull_request' in event['source']['issue'].keys() else 'issue',
                     'state': event['source']['issue']['state'],
-                    'assignees': event['source']['issue']['assignees'],
+                    'assignees': ''.join(assignee.get('login') for assignee in assignees),
                     'label': '',
                     'body': '',
                     'submitted_at': '',
@@ -260,6 +261,7 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'assigned':
                 author = event['actor'] or {}
+                assignees = event['assignee'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -273,7 +275,7 @@ class repoMethod(scraper.GitHubAPI):
                     'repo': '',
                     'type': '',
                     'state': '',
-                    'assignees': event['assignee'].get('login'),
+                    'assignees': assignees.get('login'),
                     'label': '',
                     'body': '',
                     'submitted_at': '',
@@ -287,6 +289,7 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'unassigned':
                 author = event['actor'] or {}
+                assignees = event['assignee'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -300,7 +303,7 @@ class repoMethod(scraper.GitHubAPI):
                     'repo': '',
                     'type': '',
                     'state': '',
-                    'assignees': event['assignee'].get('login'),
+                    'assignees': assignees.get('login'),
                     'label': '',
                     'body': '',
                     'submitted_at': '',
