@@ -1019,12 +1019,18 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'commit-commented':
                 comments = event['comments'] or {}
+                users = []
+                for comment in comments:
+                    if comment['user'] != None:
+                        users.append(comment['user'])
+                    else:
+                        users.append({})
                 yield {
                     'event': event['event'],
-                    'author': ', '.join(comment['user'].get('login') for comment in comments),
+                    'author': ', '.join(str(user.get('login') or '') for user in users),
                     'author_name': '',
                     'email': '',
-                    'author_type': ', '.join(comment['user'].get('type') for comment in comments),
+                    'author_type': ', '.join(str(user.get('type') or '') for user in users),
                     'author_association': ', '.join(comment['author_association'] for comment in comments),
                     'commit_id': ', '.join(comment['commit_id'] for comment in comments),
                     'created_at': ', '.join(comment.get('created_at') for comment in comments),
@@ -1046,12 +1052,18 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'line-commented':
                 comments = event['comments'] or {}
+                users = []
+                for comment in comments:
+                    if comment['user'] != None:
+                        users.append(comment['user'])
+                    else:
+                        users.append({})
                 yield {
                     'event': event['event'],
-                    'author': ', '.join(comment['user'].get('login') for comment in comments),
+                    'author': ', '.join(str(user.get('login') or '') for user in users),
                     'author_name': '',
                     'email': '',
-                    'author_type': ', '.join(comment['user'].get('type') for comment in comments),
+                    'author_type': ', '.join(str(user.get('type') or '') for user in users),
                     'author_association': ', '.join(comment['author_association'] for comment in comments),
                     'commit_id': ', '.join(comment['commit_id'] for comment in comments),
                     'created_at': ', '.join(comment.get('created_at') for comment in comments),
