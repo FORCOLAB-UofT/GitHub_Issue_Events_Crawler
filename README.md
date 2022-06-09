@@ -3,12 +3,14 @@
 A crawler for querying issue timeline events of GitHub Repositories
 
 
-Saved to local files:
+-----------Saved to local files:
 
-Input repo_slug list
+                Input repo_slug list
 
 
 ❗️❗️❗️ Reminder: check the input repo list to ensure that there is no additional empty line at the bottom ❗️❗️❗️
 
 
-Saved to database server:
+-----------Saved to database server:
+
+                type the schema and table name in the sql insert query
