@@ -1021,20 +1021,20 @@ class repoMethod(scraper.GitHubAPI):
                 comments = event['comments'] or {}
                 yield {
                     'event': event['event'],
-                    'author': [[comment['user'].get('login')] for comment in comments],
+                    'author': ', '.join(comment['user'].get('login') for comment in comments),
                     'author_name': '',
                     'email': '',
-                    'author_type': [[comment['user'].get('type')] for comment in comments],
-                    'author_association': [[comment['author_association']] for comment in comments],
-                    'commit_id': [[comment['commit_id']] for comment in comments],
-                    'created_at': [[comment.get('created_at')] for comment in comments],
+                    'author_type': ', '.join(comment['user'].get('type') for comment in comments),
+                    'author_association': ', '.join(comment['author_association']] for comment in comments),
+                    'commit_id': ', '.join(comment['commit_id']] for comment in comments),
+                    'created_at': ', '.join(comment.get('created_at')] for comment in comments),
                     'id': '',
                     'repo': '',
                     'type': '',
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': [[comment['body']] for comment in comments],
+                    'body': ''.join(comment['body'] for comment in comments),
                     'submitted_at': '',
                     'links': '',
                     'old_name': '',
@@ -1048,20 +1048,20 @@ class repoMethod(scraper.GitHubAPI):
                 comments = event['comments'] or {}
                 yield {
                     'event': event['event'],
-                    'author': [[comment['user'].get('login')] for comment in comments],
+                    'author': ', '.join(comment['user'].get('login')] for comment in comments),
                     'author_name': '',
                     'email': '',
-                    'author_type': [[comment['user'].get('type')] for comment in comments],
-                    'author_association': [[comment['author_association']] for comment in comments],
-                    'commit_id': [[comment['commit_id']] for comment in comments],
-                    'created_at': [[comment.get('created_at')] for comment in comments],
+                    'author_type': ', '.join(comment['user'].get('type') for comment in comments),
+                    'author_association': ', '.join(comment['author_association'] for comment in comments),
+                    'commit_id': ', '.join(comment['commit_id'] for comment in comments),
+                    'created_at': ', '.join(comment.get('created_at') for comment in comments),
                     'id': '',
                     'repo': '',
                     'type': '',
                     'state': '',
                     'assignees': '',
                     'label': '',
-                    'body': [[comment['body']] for comment in comments],
+                    'body': ''.join(comment['body'] for comment in comments),
                     'submitted_at': '',
                     'links': '',
                     'old_name': '',
@@ -1172,6 +1172,6 @@ if __name__ == '__main__':
             More_event_df=get_timeline_repo(More_PRs_df,example_repo[i])
             event_df=event_df.append(More_event_df)
 
-    event_df.to_excel(savefilepath+"events_file.xls")
+    event_df.to_excel(savefilepath+"file_name.xls")
 
 
