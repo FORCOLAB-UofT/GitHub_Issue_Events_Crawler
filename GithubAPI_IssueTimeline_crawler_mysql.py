@@ -1140,8 +1140,8 @@ def get_timeline_repo(pull_df,filepath,reposlug):
 
     for i in range(pull_df.shape[0]):
         start_time=time.time()
-        print(indexOverall)
         current_issue_number=pull_df.iloc[i]['number']
+        print('current PR/issue is # '+ str(current_issue_number) + '\n')
 
         current_timeline=gh_api.issue_pr_timeline(reposlug,int(current_issue_number))
         timeline_df=pd.DataFrame(current_timeline)
@@ -1171,8 +1171,9 @@ def get_timeline_repo(pull_df,filepath,reposlug):
         indexOverall+=1
         end_time=time.time()
         times=round(end_time-start_time,2)
-        print('total scraping time is{}s'.format(times))
-        print(indexOverall)
+        print('PR/issue # '+ str(current_issue_number) + ' query successfully')
+        print('total scraping time is {}s'.format(times) + '\n')
+        
 
     mergeddf=pd.concat(currentrepo_timeline_dfs,ignore_index=True)
     return mergeddf
