@@ -22,6 +22,7 @@ CREATE TABLE `issue_pr_event` (
   `reviewer` text,
   `dismissed_state` text,
   `dismissal_message` text,
+  `repo_id` int DEFAULT NULL,
   `repo_source` text,
   `issue_number` int DEFAULT NULL,
   `issue_type` text,
