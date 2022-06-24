@@ -1134,7 +1134,7 @@ def read_keywords_list(path):
 
     return keywords_list
 
-def get_timeline_repo(pull_df,filepath,reposlug):
+def get_timeline_repo(pull_df, reposlug, repo_index):
     indexOverall=0
     currentrepo_timeline_dfs=[]
 
@@ -1145,6 +1145,7 @@ def get_timeline_repo(pull_df,filepath,reposlug):
 
         current_timeline=gh_api.issue_pr_timeline(reposlug,int(current_issue_number))
         timeline_df=pd.DataFrame(current_timeline)
+        timeline_df["repo_id"]=repo_index
         timeline_df["repo_source"]=reposlug
         timeline_df["issue_number"]=current_issue_number
         timeline_df["issue_type"]="pulls"
@@ -1156,14 +1157,14 @@ def get_timeline_repo(pull_df,filepath,reposlug):
                 "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
                 "`type`, `state`,`assignees`, `label`, `body`, "
                 "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
-                "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_source`, `issue_number`, "
-                "`issue_type`, `issue_status`) VALUES"
+                "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, 
+                "`issue_number`, `issue_type`, `issue_status`) VALUES"
                 "(%s,%s,%s,%s,%s,"
                 "%s,%s,%s,%s,%s,"
                 "%s,%s,%s,%s,%s,"
                 "%s,%s,%s,%s,%s,"
                 "%s,%s,%s,%s,%s,"
-                "%s,%s);")        
+                "%s,%s,%s);")        
         
         mycursor.executemany(insert, timeline_df.values.tolist())
         mydb.commit()
@@ -1192,24 +1193,30 @@ if __name__ == '__main__':
         database=''
     )
 
-    mycursor = mydb.cursor()
+    mycursor = mydb.cursor(buffered=True)
 
     
     # Your github tokens for using GithubAPI
     gh_api =repoMethod("token1,token2,token3,token4,token5")
 
 
-    # the list of repo slugs that you want to collected timeline events of issues for.
+    # repo_list table from database
+    mycursor.execute('SELECT count(*) FROM repo_list;')
+    len_repo_list = int(mycursor.fetchone()[0])
     
-    repo_list=read_keywords_list('file path')
+    mycursor.execute('SELECT * FROM repo_list;')
+    repo_list = mycursor.fetchall()
 
-    for i in range(len(repo_list)):
-        result_obj=gh_api.repo_pullrequests(example_repo[i],"closed")
+    
+    for i in range(len_repo_list):
+        example_repo = repo_list[i][1]
+        repo_index = repo_list[i][0]
+        result_obj=gh_api.repo_pullrequests(example_repo, "closed")
         if i == 0:
             PRs_df=pd.DataFrame(result_obj)
-            get_timeline_repo(PRs_df,example_repo[i])
+            get_timeline_repo(PRs_df, example_repo, repo_index)
         elif i > 0:
             More_PRs_df=pd.DataFrame(result_obj)
-            get_timeline_repo(More_PRs_df,example_repo[i])
+            get_timeline_repo(More_PRs_df, example_repo, repo_index)
             
 
