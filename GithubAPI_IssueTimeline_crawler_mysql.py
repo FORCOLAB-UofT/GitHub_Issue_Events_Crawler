@@ -2,6 +2,7 @@ import stscraper as scraper
 import pandas as pd
 import json
 import os,time
+import mysql.connector
 
 
 class repoMethod(scraper.GitHubAPI):
@@ -1157,7 +1158,7 @@ def get_timeline_repo(pull_df, reposlug, repo_index):
                 "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
                 "`type`, `state`,`assignees`, `label`, `body`, "
                 "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
-                "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, 
+                "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, "
                 "`issue_number`, `issue_type`, `issue_status`) VALUES"
                 "(%s,%s,%s,%s,%s,"
                 "%s,%s,%s,%s,%s,"
