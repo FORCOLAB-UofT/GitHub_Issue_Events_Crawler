@@ -129,6 +129,7 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'labeled':
                 author = event['actor'] or {}
+                label = event['label'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -143,7 +144,7 @@ class repoMethod(scraper.GitHubAPI):
                     'type': '',
                     'state': '',
                     'assignees': '',
-                    'label': event['label']['name'],
+                    'label': label['name'],
                     'body': '',
                     'submitted_at': '',
                     'links': '',
@@ -156,6 +157,7 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'unlabeled':
                 author = event['actor'] or {}
+                label = event['label'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -170,7 +172,7 @@ class repoMethod(scraper.GitHubAPI):
                     'type': '',
                     'state': '',
                     'assignees': '',
-                    'label': event['label']['name'],
+                    'label': label['name'],
                     'body': '',
                     'submitted_at': '',
                     'links': '',
@@ -182,11 +184,12 @@ class repoMethod(scraper.GitHubAPI):
                     'dismissal_message': ''
                 }
             elif event['event'] == 'committed':
+                author = event['author'] or {}
                 yield {
                     'event': event['event'],
                     'author': '',
-                    'author_name': event['author']['name'],
-                    'email': event['author']['email'],
+                    'author_name': author['name'],
+                    'email': author['email'],
                     'author_type': '',
                     'author_association': '',
                     'commit_id': event['sha'],
@@ -209,6 +212,7 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'reviewed':
                 author = event['user'] or {}
+                html_link = event['_links']['html'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -226,7 +230,7 @@ class repoMethod(scraper.GitHubAPI):
                     'label': '',
                     'body': event['body'],
                     'submitted_at': event.get('submitted_at'),
-                    'links': event['_links']['html'].get('href'),
+                    'links': html_link.get('href'),
                     'old_name': '',
                     'new_name': '',
                     'requester': '',
@@ -235,12 +239,13 @@ class repoMethod(scraper.GitHubAPI):
                     'dismissal_message': ''
                 }
             elif event['event'] == 'commented':
+                user = event['user']
                 yield {
                     'event': event['event'],
-                    'author': event['user']['login'],
+                    'author': user['login'],
                     'author_name': '',
                     'email': '',
-                    'author_type': event['user']['type'],
+                    'author_type': user['type'],
                     'author_association': event['author_association'],
                     'commit_id': '',
                     'created_at': event.get('created_at'),
@@ -507,6 +512,7 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'milestoned':
                 author = event['actor'] or {}
+                milestone = event['milestone'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -521,7 +527,7 @@ class repoMethod(scraper.GitHubAPI):
                     'type': '',
                     'state': '',
                     'assignees': '',
-                    'label': event['milestone']['title'],
+                    'label': milestone['title'],
                     'body': '',
                     'submitted_at': '',
                     'links': '',
@@ -534,6 +540,7 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'demilestoned':
                 author = event['actor'] or {}
+                milestone = event['milestone'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -548,7 +555,7 @@ class repoMethod(scraper.GitHubAPI):
                     'type': '',
                     'state': '',
                     'assignees': '',
-                    'label': event['milestone']['title'],
+                    'label': milestone['title'],
                     'body': '',
                     'submitted_at': '',
                     'links': '',
@@ -804,6 +811,7 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'renamed':
                 author = event['actor'] or {}
+                rename = event['rename'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -818,8 +826,8 @@ class repoMethod(scraper.GitHubAPI):
                     'type': '',
                     'state': '',
                     'assignees': '',
-                    'label': event['rename'].get('from'),
-                    'body': event['rename'].get('to'),
+                    'label': rename.get('from'),
+                    'body': rename.get('to'),
                     'submitted_at': '',
                     'links': '',
                     'old_name': '',
@@ -858,6 +866,8 @@ class repoMethod(scraper.GitHubAPI):
                 }
             elif event['event'] == 'review_requested':
                 author = event['actor'] or {}
+                requester = event['review_requester'] or {}
+                reviewer = event['requested_reviewer'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -878,13 +888,15 @@ class repoMethod(scraper.GitHubAPI):
                     'links': '',
                     'old_name': '',
                     'new_name': '',
-                    'requester': event['review_requester'].get('login'),
-                    'reviewer': event['requested_reviewer'].get('login'),
+                    'requester': requester.get('login'),
+                    'reviewer': reviewer.get('login'),
                     'dismissed_state': '',
                     'dismissal_message': ''
                 }
             elif event['event'] == 'review_requested_removed':
                 author = event['actor'] or {}
+                requester = event['review_requester'] or {}
+                reviewer = event['requested_reviewer'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -905,13 +917,14 @@ class repoMethod(scraper.GitHubAPI):
                     'links': '',
                     'old_name': '',
                     'new_name': '',
-                    'requester': event['review_requester'].get('login'),
-                    'reviewer': event['requested_reviewer'].get('login'),
+                    'requester': requester.get('login'),
+                    'reviewer': reviewer.get('login'),
                     'dismissed_state': '',
                     'dismissal_message': ''
                 }
             elif event['event'] == 'review_dismissed':
                 author = event['actor'] or {}
+                review = event['dismissed_review'] or {}
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -934,8 +947,8 @@ class repoMethod(scraper.GitHubAPI):
                     'new_name': '',
                     'requester': '',
                     'reviewer': '',
-                    'dismissed_state': event['dismissed_review'].get('state'),
-                    'dismissal_message': event['dismissed_review'].get('dismissal_message')
+                    'dismissed_state': review.get('state'),
+                    'dismissal_message': review.get('dismissal_message')
                 }
             elif event['event'] == 'head_ref_restored':
                 author = event['actor'] or {}
