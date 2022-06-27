@@ -1156,6 +1156,7 @@ def get_timeline_repo(pull_df, reposlug, repo_index):
         start_time=time.time()
         current_issue_number=pull_df.iloc[i]['number']
         print(str(reposlug) + ' PR/issue #'+ str(current_issue_number) + '\n')
+        f.write(str(reposlug) + ' PR/issue #'+ str(current_issue_number) + '\n')
 
         current_timeline=gh_api.issue_pr_timeline(reposlug,int(current_issue_number))
         timeline_df=pd.DataFrame(current_timeline)
@@ -1187,7 +1188,9 @@ def get_timeline_repo(pull_df, reposlug, repo_index):
         end_time=time.time()
         times=round(end_time-start_time,2)
         print('PR/issue #'+ str(current_issue_number) + ' query successfully')
+        f.write('PR/issue #' + str(current_issue_number) + ' query successfully \n')
         print('total scraping time is {}s'.format(times) + '\n')
+        f.write('total scraping time is {}s'.format(times) + '\n\n')
         
 
     mergeddf=pd.concat(currentrepo_timeline_dfs,ignore_index=True)
@@ -1220,6 +1223,8 @@ if __name__ == '__main__':
     
     mycursor.execute('SELECT * FROM repo_list;')
     repo_list = mycursor.fetchall()
+    
+    f = open("events_crawler_log.txt", "a")
 
     
     for i in range(len_repo_list):
@@ -1233,4 +1238,4 @@ if __name__ == '__main__':
             More_PRs_df=pd.DataFrame(result_obj)
             get_timeline_repo(More_PRs_df, example_repo, repo_index)
             
-
+    f.close()
