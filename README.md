@@ -24,19 +24,24 @@ A crawler for querying issue timeline events of GitHub Repositories
  ❗️❗️❗️ Note that repo_list and issue_pr_event table contents may not be consistent if table structure changed by scripts. (eg. new columns)
        Then you need to rebuild the table by create...sql file and insert contents by scripts
        
+       
+       
  📝 Reminder: fill in or change the schema and table name in the sql insert query
                   
-                  <img width="941" alt="Screen Shot 2022-06-29 at 5 09 49 AM" src="https://user-images.githubusercontent.com/90332805/176296114-817b6c98-06d5-425e-b75a-c581bb999dad.png">
+( in search_cross_ref.py ⬇️)
 
-                  ( in search_cross_ref.py )
+<img width="941" alt="Screen Shot 2022-06-29 at 5 09 49 AM" src="https://user-images.githubusercontent.com/90332805/176300153-3d5ee578-3733-4322-a70c-b09d466042b0.png">
                   
                   
-                  <img width="941" alt="Screen Shot 2022-06-29 at 5 10 22 AM" src="https://user-images.githubusercontent.com/90332805/176290219-8559daec-1db9-44c4-ae89-df324996dbf1.png">
-                  ( in repo_list.py )
+( in repo_list.py ⬇️)  
+
+<img width="941" alt="Screen Shot 2022-06-29 at 5 10 22 AM" src="https://user-images.githubusercontent.com/90332805/176290219-8559daec-1db9-44c4-ae89-df324996dbf1.png">
                   
                   
-                  <img width="801" alt="Screen Shot 2022-06-29 at 5 11 02 AM" src="https://user-images.githubusercontent.com/90332805/176290737-5f7918a5-0b8d-4af8-b621-53778f9b01bb.png">
-                  ( in timeline_crawler_mysql.py )
+( in timeline_crawler_mysql.py ⬇️)   
+
+<img width="801" alt="Screen Shot 2022-06-29 at 5 11 02 AM" src="https://user-images.githubusercontent.com/90332805/176290737-5f7918a5-0b8d-4af8-b621-53778f9b01bb.png">
+                  
 
             
 
