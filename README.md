@@ -8,7 +8,7 @@ A crawler for querying issue timeline events of GitHub Repositories
                 Input repo_slug list
 
 
-❗️❗️❗️ Reminder: check the input repo list to ensure that there is no additional empty line at the bottom ❗️❗️❗️
+       Reminder: check the input repo list to ensure that there is no additional empty line at the bottom ❗️❗️❗️
 
 
 -----------timeline_events_crawler_mysql (saved to database server:
@@ -20,10 +20,21 @@ A crawler for querying issue timeline events of GitHub Repositories
                                                              
                                                        or 2. by create repo_list table.sql -> 
                                                              insert repo_list morethan500pr query.sql
-
- ❗️❗️❗️ Reminder: fill in  the schema and table name in the sql insert query
-                   
-![image](https://user-images.githubusercontent.com/90332805/175976692-58e9e92e-c723-43d2-9112-ae81c8ae5fab.png)
-
+                                                             
  ❗️❗️❗️ Note that repo_list and issue_pr_event table contents may not be consistent if table structure changed by scripts. (eg. new columns)
        Then you need to rebuild the table by create...sql file and insert contents by scripts
+       
+ 📝 Reminder: fill in or change the schema and table name in the sql insert query
+                  
+                  <img width="941" alt="Screen Shot 2022-06-29 at 5 09 49 AM" src="https://user-images.githubusercontent.com/90332805/176289415-28e43d62-8ecd-4304-be0a-7277f0eb5251.png">
+                  ( in search_cross_ref.py )
+                  
+                  <img width="941" alt="Screen Shot 2022-06-29 at 5 10 22 AM" src="https://user-images.githubusercontent.com/90332805/176290219-8559daec-1db9-44c4-ae89-df324996dbf1.png">
+                  ( in repo_list.py )
+                  
+                  <img width="801" alt="Screen Shot 2022-06-29 at 5 11 02 AM" src="https://user-images.githubusercontent.com/90332805/176290737-5f7918a5-0b8d-4af8-b621-53778f9b01bb.png">
+                  ( in timeline_crawler_mysql.py )
+
+            
+
+ 
