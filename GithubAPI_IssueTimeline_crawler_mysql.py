@@ -3,6 +3,8 @@ import pandas as pd
 import json
 import os,time
 import mysql.connector
+import mySettings
+from datetime import datetime
 
 
 class repoMethod(scraper.GitHubAPI):
@@ -13,6 +15,14 @@ class repoMethod(scraper.GitHubAPI):
         """Get repository issues (not including pull requests)"""
         # https://developer.github.com/v3/issues/#list-issues-for-a-repository
         return repo_slug
+
+    def repo_all_pr_issues(self, repo_slug):
+        """return the result of pull requests"""
+        #https://developer.github.com/v3/pulls/#list-pull-requests
+        url ='repos/'+repo_slug+'/issues'
+        repo_pr_issues= self.request(url, paginate=True,state="all")
+        return repo_pr_issues
+
 
     def repo_pullrequests(self, repo_slug,pull_state):
         """return the result of pull requests"""
@@ -867,7 +877,10 @@ class repoMethod(scraper.GitHubAPI):
             elif event['event'] == 'review_requested':
                 author = event['actor'] or {}
                 requester = event['review_requester'] or {}
-                reviewer = event['requested_reviewer'] or {}
+                try:
+                    reviewer = event['requested_reviewer']['login'] or{} 
+                except:
+                    reviewer = event['requested_team']['name'] or{} 
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -889,14 +902,18 @@ class repoMethod(scraper.GitHubAPI):
                     'old_name': '',
                     'new_name': '',
                     'requester': requester.get('login'),
-                    'reviewer': reviewer.get('login'),
+                    'reviewer': reviewer,
                     'dismissed_state': '',
                     'dismissal_message': ''
                 }
             elif event['event'] == 'review_requested_removed':
                 author = event['actor'] or {}
                 requester = event['review_requester'] or {}
-                reviewer = event['requested_reviewer'] or {}
+                try:
+                    reviewer = event['requested_reviewer']['login'] or{} 
+                except:
+                    reviewer = event['requested_team']['name'] or{} 
+                
                 yield {
                     'event': event['event'],
                     'author': author.get('login'),
@@ -918,7 +935,7 @@ class repoMethod(scraper.GitHubAPI):
                     'old_name': '',
                     'new_name': '',
                     'requester': requester.get('login'),
-                    'reviewer': reviewer.get('login'),
+                    'reviewer': reviewer,
                     'dismissed_state': '',
                     'dismissal_message': ''
                 }
@@ -1148,94 +1165,204 @@ def read_keywords_list(path):
 
     return keywords_list
 
-def get_timeline_repo(pull_df, reposlug, repo_index):
-    indexOverall=0
-    currentrepo_timeline_dfs=[]
+# def get_timeline_repo(pull_df, reposlug, repo_index):
+#     indexOverall=0
+#     currentrepo_timeline_dfs=[]
 
-    for i in range(pull_df.shape[0]):
-        start_time=time.time()
-        current_issue_number=pull_df.iloc[i]['number']
-        print(str(reposlug) + ' PR/issue #'+ str(current_issue_number) + '\n')
-        f.write(str(reposlug) + ' PR/issue #'+ str(current_issue_number) + '\n')
+#     for i in range(pull_df.shape[0]):
+#         start_time=time.time()
+#         current_issue_number=pull_df.iloc[i]['number']
+#         print(str(reposlug) + ' PR/issue #'+ str(current_issue_number) + '\n')
+#         f.write(str(reposlug) + ' PR/issue #'+ str(current_issue_number) + '\n')
 
-        current_timeline=gh_api.issue_pr_timeline(reposlug,int(current_issue_number))
-        timeline_df=pd.DataFrame(current_timeline)
-        timeline_df["repo_id"]=repo_index
-        timeline_df["repo_source"]=reposlug
-        timeline_df["issue_number"]=current_issue_number
-        timeline_df["issue_type"]="pulls"
-        timeline_df["issue_status"]="closed"
-        currentrepo_timeline_dfs.append(timeline_df)
+#         current_timeline=gh_api.issue_pr_timeline(reposlug,int(current_issue_number))
+#         timeline_df=pd.DataFrame(current_timeline)
+#         timeline_df["repo_id"]=repo_index
+#         timeline_df["repo_source"]=reposlug
+#         timeline_df["issue_number"]=current_issue_number
+#         timeline_df["issue_type"]="pulls"
+#         timeline_df["issue_status"]="closed"
+#         currentrepo_timeline_dfs.append(timeline_df)
         
-        insert=("INSERT INTO `schema_name`.`table_name`"
-                "(`event`, `author`, `author_name`, `email`, `author_type`,"
-                "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
-                "`type`, `state`,`assignees`, `label`, `body`, "
-                "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
-                "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, "
-                "`issue_number`, `issue_type`, `issue_status`) VALUES"
-                "(%s,%s,%s,%s,%s,"
-                "%s,%s,%s,%s,%s,"
-                "%s,%s,%s,%s,%s,"
-                "%s,%s,%s,%s,%s,"
-                "%s,%s,%s,%s,%s,"
-                "%s,%s,%s);")        
+#         insert=("INSERT INTO `schema_name`.`table_name`"
+#                 "(`event`, `author`, `author_name`, `email`, `author_type`,"
+#                 "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
+#                 "`type`, `state`,`assignees`, `label`, `body`, "
+#                 "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
+#                 "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, "
+#                 "`issue_number`, `issue_type`, `issue_status`) VALUES"
+#                 "(%s,%s,%s,%s,%s,"
+#                 "%s,%s,%s,%s,%s,"
+#                 "%s,%s,%s,%s,%s,"
+#                 "%s,%s,%s,%s,%s,"
+#                 "%s,%s,%s,%s,%s,"
+#                 "%s,%s,%s);")        
         
-        mycursor.executemany(insert, timeline_df.values.tolist())
-        mydb.commit()
+#         mycursor.executemany(insert, timeline_df.values.tolist())
+#         mydb.commit()
         
-        indexOverall+=1
-        end_time=time.time()
-        times=round(end_time-start_time,2)
-        print('PR/issue #'+ str(current_issue_number) + ' query successfully')
-        f.write('PR/issue #' + str(current_issue_number) + ' query successfully \n')
-        print('total scraping time is {}s'.format(times) + '\n')
-        f.write('total scraping time is {}s'.format(times) + '\n\n')
+#         indexOverall+=1
+#         end_time=time.time()
+#         times=round(end_time-start_time,2)
+#         print('PR/issue #'+ str(current_issue_number) + ' query successfully')
+#         f.write('PR/issue #' + str(current_issue_number) + ' query successfully \n')
+#         print('total scraping time is {}s'.format(times) + '\n')
+#         f.write('total scraping time is {}s'.format(times) + '\n\n')
         
 
-    mergeddf=pd.concat(currentrepo_timeline_dfs,ignore_index=True)
-    return mergeddf
+#     mergeddf=pd.concat(currentrepo_timeline_dfs,ignore_index=True)
+#     return mergeddf
+
+
+def get_timeline_repo_pr(issue_num,issue_type,issue_status, reposlug, repo_index):
+
+    start_time=time.time()
+
+    print(str(reposlug) + ' PR/issue #'+ str(issue_num) + '\n')
+    f.write(str(reposlug) + ' PR/issue #'+ str(issue_num) + '\n')
+
+    current_timeline=gh_api.issue_pr_timeline(reposlug,int(issue_num))
+    timeline_df=pd.DataFrame(current_timeline)
+    timeline_df["repo_id"]=repo_index
+    timeline_df["repo_source"]=reposlug
+    timeline_df["issue_number"]=issue_num
+    timeline_df["issue_type"]=issue_type
+    timeline_df["issue_status"]=issue_status
+    
+    insert=("INSERT INTO `timeline_events`.`issue_pr_event`"
+            "(`event`, `author`, `author_name`, `email`, `author_type`,"
+            "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
+            "`type`, `state`,`assignees`, `label`, `body`, "
+            "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
+            "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, "
+            "`issue_number`, `issue_type`, `issue_status`) VALUES"
+            "(%s,%s,%s,%s,%s,"
+            "%s,%s,%s,%s,%s,"
+            "%s,%s,%s,%s,%s,"
+            "%s,%s,%s,%s,%s,"
+            "%s,%s,%s,%s,%s,"
+            "%s,%s,%s);")        
+    
+    mycursor.executemany(insert, timeline_df.values.tolist())
+    mydb.commit()
+    
+    end_time=time.time()
+    times=round(end_time-start_time,2)
+    print('PR/issue #'+ str(issue_num) + ' query successfully')
+    f.write('PR/issue #' + str(issue_num) + ' query successfully \n')
+    print('total scraping time is {}s'.format(times) + '\n')
+    f.write('total scraping time is {}s'.format(times) + '\n\n')
+        
+
 
 
 
 #main 
 if __name__ == '__main__':
 
+
+
     # server connection
-    mydb = mysql.connector.connect(
-        host='',
-        user='',
-        password='',
-        port='',
-        database=''
-    )
+    #import mySettings, detailed creditials for connections and github tokens are listed in mySettings.py under the same directory as this file
+    mydb = mySettings.db
 
     mycursor = mydb.cursor(buffered=True)
 
-    
+    print("connected to database")
     # Your github tokens for using GithubAPI
-    gh_api =repoMethod("token1,token2,token3,token4,token5")
-
+    gh_api =repoMethod(mySettings.tokens)
 
     # repo_list table from database
     mycursor.execute('SELECT count(*) FROM repo_list;')
     len_repo_list = int(mycursor.fetchone()[0])
     
-    mycursor.execute('SELECT * FROM repo_list;')
+    mycursor.execute('SELECT * FROM repo_list order by repo_index asc;')
     repo_list = mycursor.fetchall()
     
-    f = open("events_crawler_log.txt", "a")
+    f = open("/data/timeline_events/GitHub_Issue_Events_Crawler/log/events_crawler_log.txt", "a")
 
     
     for i in range(len_repo_list):
         example_repo = repo_list[i][1]
         repo_index = repo_list[i][0]
-        result_obj=gh_api.repo_pullrequests(example_repo, "closed")
-        if i == 0:
-            PRs_df=pd.DataFrame(result_obj)
-            get_timeline_repo(PRs_df, example_repo, repo_index)
-        elif i > 0:
-            More_PRs_df=pd.DataFrame(result_obj)
-            get_timeline_repo(More_PRs_df, example_repo, repo_index)
-            
+
+        mycursor.execute('SELECT 1 FROM scraped_repos where repo_index= %s limit 1;',(repo_index,))
+        b_repo_scraped = len(mycursor.fetchall())
+        if b_repo_scraped:
+            f.write('repo :' + str(example_repo) + ' has been scraped \n')
+            continue
+        else:
+            mycursor.execute('SELECT 1 FROM issue_pr_event where repo_id= %s limit 1;',(repo_index,))
+            repo_exist = len(mycursor.fetchall())
+            f.write('scraping repo :' + str(example_repo) + ' now  \n')
+
+            if repo_exist:
+                print("repo "+str(example_repo)+" exists in pr_issue_event list, now checking pr/issue number of the repo")
+                f.write("repo "+str(example_repo)+" exists in pr_issue_event list, now checking pr/issue number of the repo \n")
+                try:
+                    repo_pr_issues=gh_api.repo_all_pr_issues(example_repo)
+                    for item in repo_pr_issues:
+                        issue_id=item['number']
+                        issue_or_pr='pull' if 'pull_request' in item else 'issue'
+                        created_at=item['created_at']
+                        updated_at=item['updated_at']
+                        closed_at=item['closed_at']
+                        author_login=item['user']['login']
+                        issue_status=item['state']
+
+                        mycursor.execute('SELECT 1 FROM issue_pr_event where repo_id= %s and issue_number=%s limit 1;',(repo_index,issue_id))
+                        event_exist = len(mycursor.fetchall())
+                        if event_exist:
+                            continue
+                        else:
+                            mycursor.execute('SELECT 1 FROM pr_issue where repo_index= %s and issue_id=%s limit 1;',(repo_index,issue_id))
+                            pr_exist = len(mycursor.fetchall())
+                            if pr_exist:
+                                get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
+                            else:
+                                sql = "INSERT INTO pr_issue (repo_index, issue_id, issue_or_pr, created_at,updated_at, closed_at, author_login, issue_status) VALUES (%s, %s, %s, %s,%s,%s,%s,%s)"
+                                val = (repo_index,issue_id,issue_or_pr,created_at,updated_at,closed_at,author_login,issue_status)
+                                mycursor.execute(sql, val)
+                                mydb.commit()
+                                
+                                # get timeline for current issue
+                                get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
+                except:
+                    f.write("repo "+str(example_repo)+" pr issue do not exist \n")
+            else:
+                try:
+                    repo_pr_issues=gh_api.repo_all_pr_issues(example_repo)
+                    for item in repo_pr_issues:
+                        issue_id=item['number']
+                        issue_or_pr='pull' if 'pull_request' in item else 'issue'
+                        created_at=item['created_at']
+                        updated_at=item['updated_at']
+                        closed_at=item['closed_at']
+                        author_login=item['user']['login']
+                        issue_status=item['state']
+                        sql = "INSERT INTO pr_issue (repo_index, issue_id, issue_or_pr, created_at,updated_at, closed_at, author_login, issue_status) VALUES (%s, %s, %s, %s,%s,%s,%s,%s)"
+
+                        val = (repo_index,issue_id,issue_or_pr,created_at,updated_at,closed_at,author_login,issue_status)
+                        mycursor.execute(sql, val)
+                        mydb.commit()
+                        
+                        # get timeline for current issue
+                        get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
+                except:
+                    f.write("repo "+str(example_repo)+" pr issue do not exist \n")
+
+
+
+            mycursor.execute('SELECT count(issue_id) FROM timeline_events.pr_issue where repo_index =%s',(repo_index,))
+            pr_issues_count = int(mycursor.fetchone()[0])
+
+            # finished collecting all pr/issue & timelines for this repo, add the repo name into the scraped_repos table.
+            sql = "INSERT INTO scraped_repos (`repo_index`,`pr_issues_count`,`repo_name`,`scraped_at`) VALUES (%s, %s, %s, %s)"
+            now_timestp=str(datetime.utcnow())
+
+            val = (repo_index,pr_issues_count,example_repo,now_timestp)
+            mycursor.execute(sql, val)
+            mydb.commit()
+
+
     f.close()

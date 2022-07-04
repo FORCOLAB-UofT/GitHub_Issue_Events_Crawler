@@ -44,5 +44,6 @@ A crawler for querying issue timeline events of GitHub Repositories
                   
 
             
-
+### Database connection set up
+create a new python file mySetting.py to store the github api tokens and database connection creditials 
  
