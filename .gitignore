@@ -2,4 +2,5 @@ log/
 *.jar
 mySettings.py
 appendix.txt
-Screenshot_settings.png
+test.ipynb
+__pycache__/mySettings.cpython-36.pyc
