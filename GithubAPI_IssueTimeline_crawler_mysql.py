@@ -5,7 +5,8 @@ import os,time
 import mysql.connector
 import mySettings
 from datetime import datetime
-
+from stscraper import base
+import requests
 
 class repoMethod(scraper.GitHubAPI):
     
@@ -1221,38 +1222,44 @@ def get_timeline_repo_pr(issue_num,issue_type,issue_status, reposlug, repo_index
     print(str(reposlug) + ' PR/issue #'+ str(issue_num) + '\n')
     f.write(str(reposlug) + ' PR/issue #'+ str(issue_num) + '\n')
 
-    current_timeline=gh_api.issue_pr_timeline(reposlug,int(issue_num))
-    timeline_df=pd.DataFrame(current_timeline)
-    timeline_df["repo_id"]=repo_index
-    timeline_df["repo_source"]=reposlug
-    timeline_df["issue_number"]=issue_num
-    timeline_df["issue_type"]=issue_type
-    timeline_df["issue_status"]=issue_status
-    
-    insert=("INSERT INTO `timeline_events`.`issue_pr_event`"
-            "(`event`, `author`, `author_name`, `email`, `author_type`,"
-            "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
-            "`type`, `state`,`assignees`, `label`, `body`, "
-            "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
-            "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, "
-            "`issue_number`, `issue_type`, `issue_status`) VALUES"
-            "(%s,%s,%s,%s,%s,"
-            "%s,%s,%s,%s,%s,"
-            "%s,%s,%s,%s,%s,"
-            "%s,%s,%s,%s,%s,"
-            "%s,%s,%s,%s,%s,"
-            "%s,%s,%s);")        
-    
-    mycursor.executemany(insert, timeline_df.values.tolist())
-    mydb.commit()
-    
-    end_time=time.time()
-    times=round(end_time-start_time,2)
-    print('PR/issue #'+ str(issue_num) + ' query successfully')
-    f.write('PR/issue #' + str(issue_num) + ' query successfully \n')
-    print('total scraping time is {}s'.format(times) + '\n')
-    f.write('total scraping time is {}s'.format(times) + '\n\n')
+    try:
+        current_timeline=gh_api.issue_pr_timeline(reposlug,int(issue_num))
+        timeline_df=pd.DataFrame(current_timeline)
+        timeline_df["repo_id"]=repo_index
+        timeline_df["repo_source"]=reposlug
+        timeline_df["issue_number"]=issue_num
+        timeline_df["issue_type"]=issue_type
+        timeline_df["issue_status"]=issue_status
         
+        insert=("INSERT INTO `timeline_events`.`issue_pr_event`"
+                "(`event`, `author`, `author_name`, `email`, `author_type`,"
+                "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
+                "`type`, `state`,`assignees`, `label`, `body`, "
+                "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
+                "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, "
+                "`issue_number`, `issue_type`, `issue_status`) VALUES"
+                "(%s,%s,%s,%s,%s,"
+                "%s,%s,%s,%s,%s,"
+                "%s,%s,%s,%s,%s,"
+                "%s,%s,%s,%s,%s,"
+                "%s,%s,%s,%s,%s,"
+                "%s,%s,%s);")        
+        
+        mycursor.executemany(insert, timeline_df.values.tolist())
+        mydb.commit()
+        end_time=time.time()
+        times=round(end_time-start_time,2)
+        print('PR/issue #'+ str(issue_num) + ' query successfully')
+        f.write('PR/issue #' + str(issue_num) + ' query successfully \n')
+        print('total scraping time is {}s'.format(times) + '\n')
+        f.write('total scraping time is {}s'.format(times) + '\n\n')
+    except base.RepoDoesNotExist:
+        print ("repo "+str(reposlug) + " does not exist \n")
+        f.write ("repo "+str(reposlug) + " does not exist \n")
+    except requests.Timeout:
+        print("timeout exception")
+        f.write("requesting API timeout for "+str(reposlug) + ' PR/issue #'+ str(issue_num) + '\n')
+
 
 
 
@@ -1272,11 +1279,15 @@ if __name__ == '__main__':
     # Your github tokens for using GithubAPI
     gh_api =repoMethod(mySettings.tokens)
 
-    # repo_list table from database
-    mycursor.execute('SELECT count(*) FROM repo_list;')
-    len_repo_list = int(mycursor.fetchone()[0])
-    
-    mycursor.execute('SELECT * FROM repo_list order by repo_index asc;')
+    ### repo_list table from database, disabled for now July 5th, 2022,
+    ### since current goal is to collect the first 623 repos that have more than 500 prs and the complete repo
+    ### list has more repos than desired
+    # mycursor.execute('SELECT count(*) FROM repo_list;')
+    # len_repo_list = int(mycursor.fetchone()[0])
+    len_repo_list=623
+
+    ### @jy set the limit to 624 to collect first 623 repos
+    mycursor.execute('SELECT * FROM repo_list order by repo_index asc limit 624;')
     repo_list = mycursor.fetchall()
     
     f = open("/data/timeline_events/GitHub_Issue_Events_Crawler/log/events_crawler_log.txt", "a")
@@ -1327,8 +1338,11 @@ if __name__ == '__main__':
                                 
                                 # get timeline for current issue
                                 get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
-                except:
-                    f.write("repo "+str(example_repo)+" pr issue do not exist \n")
+                except requests.Timeout:
+                    print("timeout exception")
+                    f.write("requesting API timeout for "+str(example_repo) + ' PR/issues \n')
+                # except:
+                #     f.write("repo "+str(example_repo)+" pr issue do not exist \n")
             else:
                 try:
                     repo_pr_issues=gh_api.repo_all_pr_issues(example_repo)
@@ -1348,8 +1362,11 @@ if __name__ == '__main__':
                         
                         # get timeline for current issue
                         get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
-                except:
-                    f.write("repo "+str(example_repo)+" pr issue do not exist \n")
+                except requests.Timeout:
+                    print("timeout exception")
+                    f.write("requesting API timeout for "+str(example_repo) + ' PR/issues \n')
+                # except:
+                #     f.write("repo "+str(example_repo)+" pr issue do not exist \n")
 
 
 
@@ -1363,6 +1380,5 @@ if __name__ == '__main__':
             val = (repo_index,pr_issues_count,example_repo,now_timestp)
             mycursor.execute(sql, val)
             mydb.commit()
-
 
     f.close()
