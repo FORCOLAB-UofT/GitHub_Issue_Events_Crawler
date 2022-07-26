@@ -1166,53 +1166,6 @@ def read_keywords_list(path):
 
     return keywords_list
 
-# def get_timeline_repo(pull_df, reposlug, repo_index):
-#     indexOverall=0
-#     currentrepo_timeline_dfs=[]
-
-#     for i in range(pull_df.shape[0]):
-#         start_time=time.time()
-#         current_issue_number=pull_df.iloc[i]['number']
-#         print(str(reposlug) + ' PR/issue #'+ str(current_issue_number) + '\n')
-#         f.write(str(reposlug) + ' PR/issue #'+ str(current_issue_number) + '\n')
-
-#         current_timeline=gh_api.issue_pr_timeline(reposlug,int(current_issue_number))
-#         timeline_df=pd.DataFrame(current_timeline)
-#         timeline_df["repo_id"]=repo_index
-#         timeline_df["repo_source"]=reposlug
-#         timeline_df["issue_number"]=current_issue_number
-#         timeline_df["issue_type"]="pulls"
-#         timeline_df["issue_status"]="closed"
-#         currentrepo_timeline_dfs.append(timeline_df)
-        
-#         insert=("INSERT INTO `schema_name`.`table_name`"
-#                 "(`event`, `author`, `author_name`, `email`, `author_type`,"
-#                 "`author_association`, `commit_id`, `created_at`, `id`, `repo`, "
-#                 "`type`, `state`,`assignees`, `label`, `body`, "
-#                 "`submitted_at`, `links`, `old_name`, `new_name`, `requester`, "
-#                 "`reviewer`, `dismissed_state`, `dismissal_message`, `repo_id`, `repo_source`, "
-#                 "`issue_number`, `issue_type`, `issue_status`) VALUES"
-#                 "(%s,%s,%s,%s,%s,"
-#                 "%s,%s,%s,%s,%s,"
-#                 "%s,%s,%s,%s,%s,"
-#                 "%s,%s,%s,%s,%s,"
-#                 "%s,%s,%s,%s,%s,"
-#                 "%s,%s,%s);")        
-        
-#         mycursor.executemany(insert, timeline_df.values.tolist())
-#         mydb.commit()
-        
-#         indexOverall+=1
-#         end_time=time.time()
-#         times=round(end_time-start_time,2)
-#         print('PR/issue #'+ str(current_issue_number) + ' query successfully')
-#         f.write('PR/issue #' + str(current_issue_number) + ' query successfully \n')
-#         print('total scraping time is {}s'.format(times) + '\n')
-#         f.write('total scraping time is {}s'.format(times) + '\n\n')
-        
-
-#     mergeddf=pd.concat(currentrepo_timeline_dfs,ignore_index=True)
-#     return mergeddf
 
 
 def get_timeline_repo_pr(issue_num,issue_type,issue_status, reposlug, repo_index):
@@ -1253,9 +1206,9 @@ def get_timeline_repo_pr(issue_num,issue_type,issue_status, reposlug, repo_index
         f.write('PR/issue #' + str(issue_num) + ' query successfully \n')
         print('total scraping time is {}s'.format(times) + '\n')
         f.write('total scraping time is {}s'.format(times) + '\n\n')
-    except base.RepoDoesNotExist:
-        print ("repo "+str(reposlug) + " does not exist \n")
-        f.write ("repo "+str(reposlug) + " does not exist \n")
+    # except base.RepoDoesNotExist:
+    #     print ("repo "+str(reposlug) + " does not exist \n")
+    #     f.write ("repo "+str(reposlug) + " does not exist \n")
     except requests.Timeout:
         print("timeout exception")
         f.write("requesting API timeout for "+str(reposlug) + ' PR/issue #'+ str(issue_num) + '\n')
@@ -1290,7 +1243,7 @@ if __name__ == '__main__':
     mycursor.execute('SELECT * FROM repo_list order by repo_index asc limit 624;')
     repo_list = mycursor.fetchall()
     
-    f = open("/data/timeline_events/GitHub_Issue_Events_Crawler/log/events_crawler_log.txt", "a")
+    f = open("/data/timeline_events/GitHub_Issue_Events_Crawler/log/events_crawler_log_2.txt", "a")
 
     
     for i in range(len_repo_list):
@@ -1311,8 +1264,11 @@ if __name__ == '__main__':
                 print("repo "+str(example_repo)+" exists in pr_issue_event list, now checking pr/issue number of the repo")
                 f.write("repo "+str(example_repo)+" exists in pr_issue_event list, now checking pr/issue number of the repo \n")
                 try:
+                    # print("repo exist , getting all issues line 1314")
                     repo_pr_issues=gh_api.repo_all_pr_issues(example_repo)
+                    # print("repo exist , got all issues line 1316")
                     for item in repo_pr_issues:
+                        # print("collecting issue loop begins")
                         issue_id=item['number']
                         issue_or_pr='pull' if 'pull_request' in item else 'issue'
                         created_at=item['created_at']
@@ -1321,31 +1277,43 @@ if __name__ == '__main__':
                         author_login=item['user']['login']
                         issue_status=item['state']
 
-                        mycursor.execute('SELECT 1 FROM issue_pr_event where repo_id= %s and issue_number=%s limit 1;',(repo_index,issue_id))
-                        event_exist = len(mycursor.fetchall())
-                        if event_exist:
+                        mycursor.execute('SELECT 1 FROM pr_issue where repo_index= %s and issue_id=%s limit 1;',(repo_index,issue_id))
+                        pr_exist = len(mycursor.fetchall())
+                        if pr_exist:
+                            today=datetime.now()
+                            f.write(str(today)+": repo "+str(example_repo)+" issue "+str(issue_id)+" already exist \n")        
                             continue
                         else:
-                            mycursor.execute('SELECT 1 FROM pr_issue where repo_index= %s and issue_id=%s limit 1;',(repo_index,issue_id))
-                            pr_exist = len(mycursor.fetchall())
-                            if pr_exist:
+                            # get timeline for current issue
+                            try: 
+                                # print(" pr doesnt exist, getting timeline, line 1344")
                                 get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
-                            else:
+                                print(" pr doesnt exist, finished getting timeline, line 1346")
+                                today=datetime.now()
+                                print(str(today)+": repo "+str(example_repo)+" issue "+str(issue_id)+" timeline events querying done, now writing to database \n")
+                                f.write(str(today)+": repo "+str(example_repo)+" issue "+str(issue_id)+" timeline events querying done, now writing to database \n")                                                            
+
                                 sql = "INSERT INTO pr_issue (repo_index, issue_id, issue_or_pr, created_at,updated_at, closed_at, author_login, issue_status) VALUES (%s, %s, %s, %s,%s,%s,%s,%s)"
                                 val = (repo_index,issue_id,issue_or_pr,created_at,updated_at,closed_at,author_login,issue_status)
                                 mycursor.execute(sql, val)
                                 mydb.commit()
-                                
-                                # get timeline for current issue
-                                get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
-                except requests.Timeout:
-                    print("timeout exception")
-                    f.write("requesting API timeout for "+str(example_repo) + ' PR/issues \n')
+                                print(str(today)+": repo "+str(example_repo)+" issue "+str(issue_id)+" timeline events querying done, writing to database done \n")
+                                f.write(str(today)+": repo "+str(example_repo)+" issue "+str(issue_id)+" timeline events querying done, writing to database done \n")                                                            
+
+                            except:
+                                today=datetime.now()
+                                print(str(today)+": repo "+str(example_repo)+" issue "+str(issue_id)+" timeline events querying failed \n")
+                                f.write(str(today)+": repo "+str(example_repo)+" issue "+str(issue_id)+" timeline events querying failed \n")                                                            
+
+                except base.RepoDoesNotExist:
+                    print ("repo "+str(example_repo) + " does not exist \n")
+                    f.write ("repo "+str(example_repo) + " does not exist \n")
                 # except:
                 #     f.write("repo "+str(example_repo)+" pr issue do not exist \n")
             else:
                 try:
                     repo_pr_issues=gh_api.repo_all_pr_issues(example_repo)
+                    # print("repo doesnt exist , got all issues line 1358")
                     for item in repo_pr_issues:
                         issue_id=item['number']
                         issue_or_pr='pull' if 'pull_request' in item else 'issue'
@@ -1360,14 +1328,12 @@ if __name__ == '__main__':
                         mycursor.execute(sql, val)
                         mydb.commit()
                         
-                        # get timeline for current issue
-                        get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
-                except requests.Timeout:
-                    print("timeout exception")
-                    f.write("requesting API timeout for "+str(example_repo) + ' PR/issues \n')
-                # except:
-                #     f.write("repo "+str(example_repo)+" pr issue do not exist \n")
 
+                        get_timeline_repo_pr(issue_id,issue_or_pr,issue_status,example_repo,repo_index)
+                        # print("got timeline line 1378")
+                except base.RepoDoesNotExist:
+                    print ("repo "+str(example_repo) + " does not exist \n")
+                    f.write ("repo "+str(example_repo) + " does not exist \n")
 
 
             mycursor.execute('SELECT count(issue_id) FROM timeline_events.pr_issue where repo_index =%s',(repo_index,))
