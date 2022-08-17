@@ -13,15 +13,13 @@ A crawler for querying issue timeline events of GitHub Repositories
 
 -----------timeline_events_crawler_mysql (saved to database server:
 
-                repo_list folder: 
-                        first generate repo_list table by 1. create repo_list table.sql -> 
-                                                             import morethan500pr.csv file -> 
-                                                             repo_list.py
+                step 1: create corresponding tbales by create queries in issue_pr_event/repo_list/scraped_repo folder
+                step 2: insert repo_index, repo_slug list to repo_list table
+                step 3: check the schema/table name in GithubAPI_IssueTimeline_events_mysql.py and ensure they're the same as name of schema/table
+                        created in step 1
+                step 4: start parsing
                                                              
-                                                       or 2. by create repo_list table.sql -> 
-                                                             insert repo_list morethan500pr query.sql
-                                                             
- ❗️❗️❗️ Note that repo_list and issue_pr_event table contents may not be consistent if table structure changed by scripts. (eg. new columns)
+ ❗️❗️❗️ Note that repo_list and issue_pr_event table contents may not be consistent if table structure changed by scripts. (e.g. new columns)
        Then you need to rebuild the table by create...sql file and insert contents by scripts
        
        
