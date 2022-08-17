@@ -17,7 +17,8 @@ A crawler for querying issue timeline events of GitHub Repositories
                 step 2: insert repo_index, repo_slug list to repo_list table
                 step 3: check the schema/table name in GithubAPI_IssueTimeline_events_mysql.py and ensure they're the same as name of schema/table
                         created in step 1
-                step 4: start parsing
+                step 4: database connection mySetting.py (see the last part of this README)
+                step 5: start parsing
                                                              
  ❗️❗️❗️ Note that repo_list and issue_pr_event table contents may not be consistent if table structure changed by scripts. (e.g. new columns)
        Then you need to rebuild the table by create...sql file and insert contents by scripts
